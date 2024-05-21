@@ -67,37 +67,39 @@ export default function ({ navigation }) {
         <View>
           <Text style={css.feriadosTitulo}>Feriados e imendas:</Text>
 
-          <View style={css.feriadoContainer}>
-            <View style={css.feriadoCard}>
-              <View style={css.casinha}>
-                <FontAwesome6 name="house-chimney" size={24} color="black" />
+          <ScrollView nestedScrollEnabled={true} style={css.feriadoScrollContainer}>
+            <View style={css.feriadoContainer}>
+              <View style={css.feriadoCard}>
+                <View style={css.casinha}>
+                  <FontAwesome6 name="house-chimney" size={24} color="black" />
+                </View>
+                <View style={css.feriadoBorda}>
+                  <Text style={css.feriado}>Dia do Trabalhador</Text>
+                  <Text style={css.feriadoData}>01/05/2024</Text>
+                </View>
               </View>
-              <View style={css.feriadoBorda}>
-                <Text style={css.feriado}>Dia do Trabalhador</Text>
-                <Text style={css.feriadoData}>01/05/2024</Text>
-              </View>
-            </View>
 
-            <View style={css.feriadoCard}>
-              <View style={css.casinha}>
-                <FontAwesome6 name="house-chimney" size={24} color="black" />
+              <View style={css.feriadoCard}>
+                <View style={css.casinha}>
+                  <FontAwesome6 name="house-chimney" size={24} color="black" />
+                </View>
+                <View style={css.feriadoBorda}>
+                  <Text style={css.feriado}>Dia das Mães</Text>
+                  <Text style={css.feriadoData}>12/05/2024</Text>
+                </View>
               </View>
-              <View style={css.feriadoBorda}>
-                <Text style={css.feriado}>Dia das Mães</Text>
-                <Text style={css.feriadoData}>12/05/2024</Text>
-              </View>
-            </View>
 
-            <View style={css.feriadoCard}>
-              <View style={css.casinha}>
-                <FontAwesome6 name="house-chimney" size={24} color="black" />
-              </View>
-              <View style={css.feriadoBorda}>
-                <Text style={css.feriado}>Corpus Christi</Text>
-                <Text style={css.feriadoData}>30/05/2024</Text>
+              <View style={css.feriadoCard}>
+                <View style={css.casinha}>
+                  <FontAwesome6 name="house-chimney" size={24} color="black" />
+                </View>
+                <View style={css.feriadoBorda}>
+                  <Text style={css.feriado}>Corpus Christi</Text>
+                  <Text style={css.feriadoData}>30/05/2024</Text>
+                </View>
               </View>
             </View>
-          </View>
+          </ScrollView>
           
         </View>
       </View>
@@ -193,12 +195,18 @@ const css = StyleSheet.create({
     marginBottom: 20,
   },
   feriadosTitulo: {
-    marginTop: -50,
+    marginTop: -40,
     fontSize: 20,
     color: '#626576',
     fontWeight: 'bold',
     marginLeft: '7%',
     marginBottom: 15,
+  },
+  feriadoScrollContainer: {
+    height: 160,
+    width: 395, 
+    marginLeft: 1,
+    marginRight: 30,
   },
   feriadoCard: {
     flexDirection: 'row',
@@ -212,7 +220,7 @@ const css = StyleSheet.create({
     borderWidth: 1,
     padding: 15,
     borderRadius: 15,
-    marginRight: 10, // Espaço entre o ícone e o card
+    marginRight: 10, 
   },
   feriadoBorda: {
     flex: 1,
@@ -247,15 +255,15 @@ const css = StyleSheet.create({
     paddingBottom: 70,
   },
   textoFulano: {
-    fontSize: 40,
+    fontSize: 43,
     color: '#fff',
-    marginTop: 30,
+    marginTop: 40,
     marginLeft: 30,
     marginRight: 30,
     fontWeight: 'bold',
   },
   textoFulano2: {
-    marginTop: 5,
+    marginTop: 10,
     fontSize: 20,
     marginLeft: 30,
     fontWeight: 'bold',
@@ -282,7 +290,7 @@ const css = StyleSheet.create({
     width: '100%',
     borderRadius: 20,
     justifyContent: 'space-between',
-    marginBottom: 10, // Espaço entre os cards
+    marginBottom: 10, 
   },
   textoAula: {
     fontSize: 40,

@@ -38,11 +38,12 @@ const styles = StyleSheet.create({
   perfilLogo: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginLeft: 2
   },
   textoPerfilLogo: {
     fontSize: 30,
     fontWeight: 'bold',
     color: '#8C52FF',
-    marginLeft: 8, // Espaço entre o texto e a logo
+    marginLeft: 1, // Espaço entre o texto e a logo
   },
 });

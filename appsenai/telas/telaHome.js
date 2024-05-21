@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Text, View, StyleSheet, ScrollView, Image } from 'react-native';
 
-// Certifique-se de ajustar o caminho conforme a localização real do Header.js
 import Header from "../components/Header"; 
-import { FontAwesome, FontAwesome6 } from "@expo/vector-icons";
+import { FontAwesome6 } from "@expo/vector-icons";
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 
 LocaleConfig.locales['fr'] = {
@@ -26,7 +25,7 @@ export default function ({ navigation }) {
   };
 
   return (
-    <ScrollView style={css.container}>
+    <ScrollView nestedScrollEnabled={true} style={css.container}>
       <View>
         <Header navigation={navigation} />
 
@@ -37,9 +36,9 @@ export default function ({ navigation }) {
               backgroundColor: '#fff',
               calendarBackground: '#fff',
               textSectionTitleColor: '#3C4043',
-              selectedDayBackgroundColor: '#000',
+              selectedDayBackgroundColor: '#8C52FF',
               selectedDayTextColor: '#fff',
-              todayTextColor: '#000',
+              todayTextColor: '#8C52FF',
               dayTextColor: '#000',
               textDisabledColor: '#b5b5b5',
               arrowColor: '#3C4043',
@@ -68,47 +67,38 @@ export default function ({ navigation }) {
         <View>
           <Text style={css.feriadosTitulo}>Feriados e imendas:</Text>
 
-          <ScrollView style={css.scrollContainer} contentContainerStyle={css.scrollContent}>
-            <View style={css.viewFeriados}>
+          <View style={css.feriadoContainer}>
+            <View style={css.feriadoCard}>
               <View style={css.casinha}>
                 <FontAwesome6 name="house-chimney" size={24} color="black" />
               </View>
               <View style={css.feriadoBorda}>
-                <Text style={css.feriado}>Dia do Trabalho e Trabalhador</Text>
+                <Text style={css.feriado}>Dia do Trabalhador</Text>
                 <Text style={css.feriadoData}>01/05/2024</Text>
               </View>
             </View>
 
-            <View style={css.viewFeriados}>
+            <View style={css.feriadoCard}>
               <View style={css.casinha}>
                 <FontAwesome6 name="house-chimney" size={24} color="black" />
               </View>
               <View style={css.feriadoBorda}>
-                <Text style={css.feriado}>Dia do Trabalho e Trabalhador</Text>
-                <Text style={css.feriadoData}>01/05/2024</Text>
+                <Text style={css.feriado}>Dia das Mães</Text>
+                <Text style={css.feriadoData}>12/05/2024</Text>
               </View>
             </View>
 
-            <View style={css.viewFeriados}>
+            <View style={css.feriadoCard}>
               <View style={css.casinha}>
                 <FontAwesome6 name="house-chimney" size={24} color="black" />
               </View>
               <View style={css.feriadoBorda}>
-                <Text style={css.feriado}>Independência do Brasil</Text>
-                <Text style={css.feriadoData}>07/09/2024</Text>
+                <Text style={css.feriado}>Corpus Christi</Text>
+                <Text style={css.feriadoData}>30/05/2024</Text>
               </View>
             </View>
-
-            <View style={css.viewFeriados}>
-              <View style={css.casinha}>
-                <FontAwesome6 name="house-chimney" size={24} color="black" />
-              </View>
-              <View style={css.feriadoBorda}>
-                <Text style={css.feriado}>Proclamação da República</Text>
-                <Text style={css.feriadoData}>15/11/2024</Text>
-              </View>
-            </View>
-          </ScrollView>
+          </View>
+          
         </View>
       </View>
 
@@ -117,17 +107,61 @@ export default function ({ navigation }) {
           <View>
             <Text style={css.textoFulano}>Cronograma</Text>
             <Text style={css.textoData}>{selectedDate}</Text>
-            <ScrollView style={css.divInformacoes}>
-              <View style={css.divLado}>
-                <View>
-                  <Text style={css.textoAula}>Python</Text>
-                  <Text style={css.textoProfessor}>Prof° Bruno</Text>
+            <ScrollView nestedScrollEnabled={true} style={css.scrollContainer}>
+                <View style={css.divLado}>
+                  <View>
+                    <Text style={css.textoAula}>Python</Text>
+                    <Text style={css.textoProfessor}>Prof° Bruno</Text>
+                  </View>
+                  <View>
+                    <Text style={css.textoHorario}>15:00</Text>
+                    <Text style={css.textoSala}>Sala 2</Text>
+                  </View>
                 </View>
-                <View>
-                  <Text style={css.textoHorario}>15:00</Text>
-                  <Text style={css.textoSala}>Sala 2</Text>
+
+                <View style={css.divLado}>
+                  <View>
+                    <Text style={css.textoAula}>Python</Text>
+                    <Text style={css.textoProfessor}>Prof° Bruno</Text>
+                  </View>
+                  <View>
+                    <Text style={css.textoHorario}>15:00</Text>
+                    <Text style={css.textoSala}>Sala 2</Text>
+                  </View>
                 </View>
-              </View>
+
+                <View style={css.divLado}>
+                  <View>
+                    <Text style={css.textoAula}>Python</Text>
+                    <Text style={css.textoProfessor}>Prof° Bruno</Text>
+                  </View>
+                  <View>
+                    <Text style={css.textoHorario}>15:00</Text>
+                    <Text style={css.textoSala}>Sala 2</Text>
+                  </View>
+                </View>
+
+                <View style={css.divLado}>
+                  <View>
+                    <Text style={css.textoAula}>Python</Text>
+                    <Text style={css.textoProfessor}>Prof° Bruno</Text>
+                  </View>
+                  <View>
+                    <Text style={css.textoHorario}>15:00</Text>
+                    <Text style={css.textoSala}>Sala 2</Text>
+                  </View>
+                </View>
+
+                <View style={css.divLado}>
+                  <View>
+                    <Text style={css.textoAula}>Python</Text>
+                    <Text style={css.textoProfessor}>Prof° Bruno</Text>
+                  </View>
+                  <View>
+                    <Text style={css.textoHorario}>15:00</Text>
+                    <Text style={css.textoSala}>Sala 2</Text>
+                  </View>
+                </View>
             </ScrollView>
           </View>
         ) : (
@@ -159,31 +193,29 @@ const css = StyleSheet.create({
     marginBottom: 20,
   },
   feriadosTitulo: {
+    marginTop: -50,
     fontSize: 20,
     color: '#626576',
     fontWeight: 'bold',
     marginLeft: '7%',
     marginBottom: 15,
   },
-  scrollContainer: {
-    height: 180, // Ajuste a altura conforme necessário
-  },
-  scrollContent: {
-    paddingHorizontal: '7%',
-  },
-  viewFeriados: {
+  feriadoCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 10,
-    gap: 20,
+    gap: 0,
+    width: '100%',
   },
   casinha: {
     borderWidth: 1,
     padding: 15,
     borderRadius: 15,
+    marginRight: 10, // Espaço entre o ícone e o card
   },
   feriadoBorda: {
+    flex: 1,
     borderWidth: 1,
     borderColor: "#000",
     padding: 10,
@@ -194,6 +226,10 @@ const css = StyleSheet.create({
     shadowRadius: 2,
     elevation: 5,
     backgroundColor: "#fff",
+  },
+  feriadoContainer:{
+    marginLeft: 30,
+    marginRight: 30,
   },
   feriado: {
     fontSize: 15,
@@ -232,8 +268,12 @@ const css = StyleSheet.create({
     marginLeft: 30,
     marginRight: 30,
   },
-  divInformacoes: {
-    margin: '8%',
+  scrollContainer: {
+    height: 300, 
+    marginLeft: '8%',
+    marginRight: '8%',
+    marginTop: 10,
+    marginBottom: 10,
   },
   divLado: {
     flexDirection: 'row',
@@ -242,6 +282,7 @@ const css = StyleSheet.create({
     width: '100%',
     borderRadius: 20,
     justifyContent: 'space-between',
+    marginBottom: 10, // Espaço entre os cards
   },
   textoAula: {
     fontSize: 40,
@@ -265,8 +306,8 @@ const css = StyleSheet.create({
   },
   logoBranca: {
     marginTop: 50,
-    marginLeft: '33%',
-    width: 120,
-    height: 60,
+    marginLeft: 100,
+    width: 190,
+    height: 80,
   },
 });

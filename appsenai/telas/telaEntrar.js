@@ -118,15 +118,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   imagem: {
-    top: 280,
+    top: 210,
     width: 390,
     height: 270,
     marginBottom: 20,
   },
   logo: {
-    top: 220,
-    width: 170,
-    height: 170,
+    top: 180,
+    width: 155,
+    height: 65,
     marginBottom: 20,
   },
   formContainer: {
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     marginTop: 180,
     padding: 20,
     width: '100%',
-    height: '60%',
+    height: '50%',
     alignItems: 'center',
   },
   inputContainer: {

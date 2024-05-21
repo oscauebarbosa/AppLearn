@@ -6,14 +6,14 @@ export default function App() {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
-      <Image source={require('../assets/fundo1.png')} style={styles.imagem} />
-      <Image source={require('../assets/logoCompBranca.png')} style={styles.logo} />
-      <Text style={styles.text}>Vamos começar?</Text>
-      <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate("TelaEntrar")}>
-        <Text style={styles.buttonText}>Entrar</Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity 
+      style={styles.container} 
+      onPress={() => navigation.navigate("TelaEntrar")}
+    >
+      <View style={styles.container}>
+        <Image source={require('../assets/logoCompBranca.png')} style={styles.logo} />
+      </View>
+    </TouchableOpacity>
   );
 }
 
@@ -24,39 +24,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  imagem: {
-    top: 45,
-    width: 320,
-    height: 320,
-    marginBottom: 20,
-  },
   logo: {
-    top: -20,
-    width: 150,
-    height: 150,
-    marginBottom: 20,
-  },
-  text: {
-    top: -50,
-    fontSize: 35,
-    color: 'white',
-    marginBottom: 20,
-    fontWeight: 'bold',
-  },
-  btn: {
-    top: -60,
-    backgroundColor: '#FED960',
-    alignItems: 'center',
-    width: 300,
-    padding: 10,
-    margin: 10,
-    borderRadius: 18,
-    borderColor: '#FED960',
-    borderWidth: 3,
-  },
-  buttonText: {
-    color: '#000000',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
+    width: 250,
+    height: 100
+  }
 });

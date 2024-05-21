@@ -13,7 +13,7 @@ export default function Header({ navigation }) {
         <Text style={styles.textoPerfilLogo}>Calendário</Text>
       </View>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Perfil')}>
+      <TouchableOpacity onPress={() => navigation.navigate("TelaPerfil")}>
         {perfil?.imageUri ? (
           <Image
             source={{ uri: perfil.imageUri }}
@@ -43,6 +43,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     color: '#8C52FF',
-    marginLeft: 10, // Espaço entre o texto e a logo
+    marginLeft: 8, // Espaço entre o texto e a logo
   },
 });

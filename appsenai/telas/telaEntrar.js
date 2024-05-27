@@ -91,7 +91,7 @@ export default function App() {
           </TouchableOpacity>
           <View style={styles.inputUnderline} />
         </View>
-        <TouchableOpacity style={styles.btn} onPress={() => Alert.alert('Entrar', 'Botão de entrar pressionado!')}>
+        <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate("TelaHome")}>
           <Text style={styles.buttonText}>Entrar</Text>
         </TouchableOpacity>
         <View style={styles.biometricContainer}>

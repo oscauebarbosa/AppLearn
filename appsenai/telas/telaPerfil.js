@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Text, View, StyleSheet, Image, ScrollView, TouchableOpacity, Pressable, Modal, TextInput, Alert } from 'react-native';
+import { Text, View, StyleSheet, Image, ScrollView, TouchableOpacity, Pressable, Modal, TextInput, Alert, TouchableWithoutFeedback } from 'react-native';
 import Dados from "../context/DadosContext";
 import { FontAwesome6, FontAwesome, Fontisto, Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -12,6 +12,8 @@ export default function({ navigation }) {
   const [novaSenha, setNovaSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [imageUri, setImageUri] = useState(perfil.imageUri ? [perfil.imageUri] : []);
+  const [image, setImage] = useState(perfil.image ? [perfil.image] : []);
 
   useEffect(() => {
     if (perfil.imageUri || perfil.image) {
@@ -19,13 +21,12 @@ export default function({ navigation }) {
     }
   }, [perfil]);
 
-  function cadastrar() {
-    let copia = {
-      imageUri: imageUri[0],
-      image: image[0]
-    };
-    setPerfil(copia);
-    navigation.navigate("TelaHome");
+  function cadastrar(img) {
+    setPerfil({
+      ...perfil,
+      imageUri: img,
+      image: img,
+    });
   }
 
   function alterarSenha() {
@@ -38,10 +39,7 @@ export default function({ navigation }) {
     setModalSenhaVisible(false);
   }
 
-  const [imageUri, setImageUri] = useState([]);
-  const [image, setImage] = useState([]);
-
-  async function pickImage(setImageUri) {
+  async function pickImage() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
       alert('Desculpe, precisamos de permissões da biblioteca de fotos para fazer isso funcionar!');
@@ -56,7 +54,7 @@ export default function({ navigation }) {
 
     if (!result.canceled) {
       setImageUri([result.assets[0].uri]);
-      cadastrar();
+      cadastrar(result.assets[0].uri);
     }
   }
 
@@ -76,23 +74,28 @@ export default function({ navigation }) {
     if (!result.canceled) {
       setImageUri([]);
       setImage([result.assets[0].uri]);
-      cadastrar();
+      cadastrar(result.assets[0].uri);
     }
   }
 
   function limparImagem() {
     setImageUri([]);
     setImage([]);
-    perfil.imageUri = null;
-    perfil.image = null;
+    setPerfil({
+      ...perfil,
+      imageUri: null,
+      image: null,
+    });
   }
 
   return (
     <ScrollView style={css.container}>
-      <View style={css.perfilLogo}>
-        <Image style={{ width: 50, height: 50 }} source={require('../assets/logoCorujaBranca.png')} />
-        <Text style={css.textoPerfilLogo}>Perfil</Text>
-      </View>
+      <TouchableOpacity onPress={() => navigation.navigate("TelaHome")}>
+        <View style={css.perfilLogo}>
+          <Image style={{ width: 50, height: 50 }} source={require('../assets/logoCorujaBranca.png')} />
+          <Text style={css.textoPerfilLogo}>Perfil</Text>
+        </View>
+      </TouchableOpacity>
 
       <View style={css.circulo}>
         <View style={css.circuloECamera}>
@@ -173,37 +176,44 @@ export default function({ navigation }) {
           animationType="slide"
           visible={modalVisible}
           onRequestClose={() => setModalVisible(false)}
+          transparent={true}
         >
-          <View style={css.modalContent}>
-            <View style={css.adicionarFotoRow}>
-              <View style={css.adicionarFoto}>
-                <TouchableOpacity onPress={() => {
-                  setModalVisible(false);
-                  pickImage(setImageUri);
-                }}>
-                  <Fontisto name="photograph" size={50} color="black" />
-                </TouchableOpacity>
-              </View>
+          <TouchableOpacity style={css.modalOverlay} onPress={() => setModalVisible(false)}>
+            <TouchableWithoutFeedback>
+              <View style={[css.modalContainerfoto, {borderRadius: 20}]}>
+                <Text style={css.modalTitulo}>Foto de Perfil</Text>
+                
+                <View style={css.adicionarFotoRow}>
+                  <View style={[css.adicionarFoto, css.marginHorizontal]}>
+                    <TouchableOpacity onPress={() => {
+                      setModalVisible(false);
+                      pickImage();
+                    }}>
+                      <Fontisto name="photograph" size={50} color="black" />
+                    </TouchableOpacity>
+                  </View>
 
-              <View style={css.adicionarFoto}>
-                <TouchableOpacity onPress={() => {
-                  setModalVisible(false);
-                  takePhoto();
-                }}>
-                  <FontAwesome6 name="camera-retro" size={50} color="black" />
-                </TouchableOpacity>
-              </View>
-            </View>
+                  <View style={[css.adicionarFoto, css.marginHorizontal]}>
+                    <TouchableOpacity onPress={() => {
+                      setModalVisible(false);
+                      takePhoto();
+                    }}>
+                      <FontAwesome6 name="camera-retro" size={50} color="black" style={{ borderColor: "#fff" }} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
 
-            <View style={css.botoes}>
-              <Pressable style={css.botao} onPress={() => {
-                setModalVisible(false);
-                limparImagem();
-              }}>
-                <Text style={css.textoBotaoSalvar}>Retirar Foto de Perfil</Text>
-              </Pressable>
-            </View>
-          </View>
+                <View style={css.botoes}>
+                  <Pressable style={css.botao} onPress={() => {
+                    setModalVisible(false);
+                    limparImagem();
+                  }}>
+                    <Text style={css.textoBotaoSalvar}>Excluir foto</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </TouchableOpacity>
         </Modal>
 
         <Modal
@@ -212,56 +222,58 @@ export default function({ navigation }) {
           onRequestClose={() => setModalSenhaVisible(false)}
           transparent={true}
         >
-          <View style={css.modalOverlay}>
-            <View style={css.modalContainer}>
-              <Text style={css.modalTitulo}>Alterar Senha</Text>
-              <View style={css.inputContainer}>
-                <TextInput
-                  style={css.input}
-                  placeholder="Nova senha"
-                  placeholderTextColor="#ccc"
-                  textAlign="center"
-                  secureTextEntry={!passwordVisible}
-                  onChangeText={text => setNovaSenha(text)}
-                  value={novaSenha}
-                />
-                <TouchableOpacity
-                  style={css.eyeIcon}
-                  onPress={() => setPasswordVisible(!passwordVisible)}
-                >
-                  <Ionicons
-                    name={passwordVisible ? "eye" : "eye-off"}
-                    size={24}
-                    color="#ccc"
+          <TouchableOpacity style={css.modalOverlay} onPress={() => setModalSenhaVisible(false)}>
+            <TouchableWithoutFeedback>
+              <View style={[css.modalContainersenha, {borderRadius: 20}]}>
+                <Text style={css.modalTitulo}>Alterar senha</Text>
+                <View style={css.inputContainer}>
+                  <TextInput
+                    style={css.input}
+                    placeholder="Nova senha"
+                    placeholderTextColor="#ccc"
+                    textAlign="center"
+                    secureTextEntry={!passwordVisible}
+                    onChangeText={text => setNovaSenha(text)}
+                    value={novaSenha}
                   />
-                </TouchableOpacity>
-              </View>
-              <View style={css.inputContainer}>
-                <TextInput
-                  style={css.input}
-                  placeholder="Confirmar senha"
-                  placeholderTextColor="#ccc"
-                  textAlign="center"
-                  secureTextEntry={!passwordVisible}
-                  onChangeText={text => setConfirmarSenha(text)}
-                  value={confirmarSenha}
-                />
-                <TouchableOpacity
-                  style={css.eyeIcon}
-                  onPress={() => setPasswordVisible(!passwordVisible)}
-                >
-                  <Ionicons
-                    name={passwordVisible ? "eye" : "eye-off"}
-                    size={24}
-                    color="#ccc"
+                  <TouchableOpacity
+                    style={css.eyeIcon}
+                    onPress={() => setPasswordVisible(!passwordVisible)}
+                  >
+                    <Ionicons
+                      name={passwordVisible ? "eye" : "eye-off"}
+                      size={24}
+                      color="#ccc"
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View style={css.inputContainer}>
+                  <TextInput
+                    style={css.input}
+                    placeholder="Confirmar senha"
+                    placeholderTextColor="#ccc"
+                    textAlign="center"
+                    secureTextEntry={!passwordVisible}
+                    onChangeText={text => setConfirmarSenha(text)}
+                    value={confirmarSenha}
                   />
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    style={css.eyeIcon}
+                    onPress={() => setPasswordVisible(!passwordVisible)}
+                  >
+                    <Ionicons
+                      name={passwordVisible ? "eye" : "eye-off"}
+                      size={24}
+                      color="#ccc"
+                    />
+                  </TouchableOpacity>
+                </View>
+                <Pressable style={[css.botao, {marginTop: 30}]}  onPress={() => alterarSenha()}>
+                  <Text style={css.textoBotaoSalvar}>Salvar</Text>
+                </Pressable>
               </View>
-              <Pressable style={css.botao} onPress={() => alterarSenha()}>
-                <Text style={css.textoBotaoSalvar}>Salvar</Text>
-              </Pressable>
-            </View>
-          </View>
+            </TouchableWithoutFeedback>
+          </TouchableOpacity>
         </Modal>
       </View>
     </ScrollView>
@@ -376,6 +388,7 @@ const css = StyleSheet.create({
     height: 60
   },
   adicionarFotoRow: {
+    marginTop: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     margin: 30
@@ -383,12 +396,17 @@ const css = StyleSheet.create({
   adicionarFoto: {
     backgroundColor: '#fff',
     alignItems: 'center',
-    borderWidth: 1,
+    borderWidth: 0,
     padding: 20,
     borderRadius: 20,
     width: 120,
     elevation: 10,
-    shadowColor: 'black'
+    shadowColor: 'black',
+    shadowRadius: 2,
+    shadowOpacity: 0.2
+  },
+  marginHorizontal: {
+    marginHorizontal: 15, 
   },
   botoes: {
     alignItems: 'center',
@@ -410,29 +428,23 @@ const css = StyleSheet.create({
     fontWeight: 'bold',
     color: '#fff'
   },
-  modalContent: {
-    backgroundColor: 'white',
-    margin: 20,
-    padding: 35,
-    alignItems: 'center',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-    modalOverlay: {
+  modalOverlay: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  modalContainer: {
+  modalContainerfoto: {
     width: '80%',
+    height: '35%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalContainersenha: {
+    width: '80%',
+    height: '33%',
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,

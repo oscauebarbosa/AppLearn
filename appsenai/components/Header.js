@@ -4,7 +4,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import Dados from '../context/DadosContext';
 
 export default function Header({ navigation }) {
-  const perfil = useContext(Dados);
+  const { perfil } = useContext(Dados);
 
   return (
     <View style={styles.header}>
@@ -14,9 +14,9 @@ export default function Header({ navigation }) {
       </View>
 
       <TouchableOpacity onPress={() => navigation.navigate("TelaPerfil")}>
-        {perfil?.imageUri ? (
+        {perfil?.image ? (
           <Image
-            source={{ uri: perfil.imageUri }}
+            source={{ uri: perfil.image }}
             style={{ width: 50, height: 50, borderRadius: 25 }}
           />
         ) : (

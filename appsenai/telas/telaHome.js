@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Text, View, StyleSheet, ScrollView, Image } from 'react-native';
-
 import Header from "../components/Header"; 
 import { FontAwesome6 } from "@expo/vector-icons";
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 
-LocaleConfig.locales['fr'] = {
+LocaleConfig.locales['pt-br'] = {
   monthNames: [
     "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
@@ -15,23 +14,58 @@ LocaleConfig.locales['fr'] = {
   ],
   dayNamesShort: ["Dom.", "Seg.", "Ter.", "Qua.", "Qui.", "Sex.", "Sáb."]
 };
-LocaleConfig.defaultLocale = 'fr';
+LocaleConfig.defaultLocale = 'pt-br';
 
-export default function ({ navigation }) {
+const holidays = [
+  { name: 'Ano Novo', date: '2024-01-01' },
+  { name: 'Aniversário de São Paulo', date: '2024-01-25' },
+  { name: 'Carnaval', date: '2024-02-12' },
+  { name: 'Carnaval', date: '2024-02-13' },
+  { name: 'Quarta-feira de Cinzas', date: '2024-02-14' },
+  { name: 'Sexta-feira Santa', date: '2024-03-29' },
+  { name: 'Páscoa', date: '2024-03-31' },
+  { name: 'Dia de Tiradentes', date: '2024-04-21' },
+  { name: 'Dia do Trabalhador', date: '2024-05-01' },
+  { name: 'Dia das Mães', date: '2024-05-12' },
+  { name: 'Corpus Christi', date: '2024-05-30' },
+  { name: 'Revolução Constitucionalista', date: '2024-07-09' },
+  { name: 'Dia dos Pais', date: '2024-08-11' },
+  { name: 'Independência do Brasil', date: '2024-09-07' },
+  { name: 'Dia das Crianças', date: '2024-10-12' },
+  { name: 'Nossa Senhora Aparecida', date: '2024-10-12' },
+  { name: 'Finados', date: '2024-11-02' },
+  { name: 'Proclamação da República', date: '2024-11-15' },
+  { name: 'Consciência Negra', date: '2024-11-20' },
+  { name: 'Natal', date: '2024-12-25' }
+];
+
+export default function MyComponent({ navigation }) {
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); 
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
   const adicionarViagem = (dataInicio) => {
     setSelectedDate(dataInicio);
   };
 
+  const formataData = (data) => {
+    const date = new Date(data);
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+  }
+
+  const filteredHolidays = holidays.filter(holiday => {
+    const [year, month] = holiday.date.split('-');
+    return parseInt(month, 10) === selectedMonth && parseInt(year, 10) === selectedYear;
+  });
+
   return (
-    <ScrollView nestedScrollEnabled={true} style={css.container}>
+    <ScrollView nestedScrollEnabled={true} style={styles.container}>
       <View>
         <Header navigation={navigation} />
 
-        <View style={css.calendarContainer}>
+        <View style={styles.calendarContainer}>
           <Calendar
-            style={css.calendar}
+            style={styles.calendar}
             theme={{
               backgroundColor: '#fff',
               calendarBackground: '#fff',
@@ -51,10 +85,14 @@ export default function ({ navigation }) {
             }}
             onDayPress={(day) => {
               if (!selectedDate) {
-                adicionarViagem(day.dateString, null);
+                adicionarViagem(day.dateString);
               } else {
                 setSelectedDate(null);
               }
+            }}
+            onMonthChange={(month) => {
+              setSelectedMonth(month.month);
+              setSelectedYear(month.year);
             }}
             markedDates={{
               [selectedDate]: { selected: true },
@@ -65,120 +103,123 @@ export default function ({ navigation }) {
         </View>
 
         <View>
-          <Text style={css.feriadosTitulo}>Feriados e imendas:</Text>
+          <Text style={styles.feriadosTitulo}>Feriados e imendas:</Text>
 
-          <ScrollView nestedScrollEnabled={true} style={css.feriadoScrollContainer}>
-            <View style={css.feriadoContainer}>
-              <View style={css.feriadoCard}>
-                <View style={css.casinha}>
-                  <FontAwesome6 name="house-chimney" size={24} color="black" />
+          <ScrollView nestedScrollEnabled={true} style={styles.feriadoScrollContainer}>
+            <View style={styles.feriadoContainer}>
+              {filteredHolidays.length > 0 ? (
+                filteredHolidays.map((holi, index) => (
+                  <View style={styles.feriadoCard} key={index}>
+                    <View style={styles.casinha}>
+                      <FontAwesome6 name="house-chimney" size={24} color="black" />
+                    </View>
+                    <View style={styles.feriadoBorda}>
+                      <Text style={styles.feriado}>{holi.name}</Text>
+                      <Text style={styles.feriadoData}>{formataData(holi.date)}</Text>
+                    </View>
+                  </View>
+                ))
+              ) : (
+                <View style={styles.feriadoCard}>
+                  <View style={styles.casinha}>
+                    <FontAwesome6 name="house-chimney" size={24} color="black" />
+                  </View>
+                  <View style={styles.feriadoBorda}>
+                    <Text style={styles.feriado}>Nesse mês não há feriados</Text>
+                  </View>
                 </View>
-                <View style={css.feriadoBorda}>
-                  <Text style={css.feriado}>Dia do Trabalhador</Text>
-                  <Text style={css.feriadoData}>01/05/2024</Text>
-                </View>
-              </View>
-
-              <View style={css.feriadoCard}>
-                <View style={css.casinha}>
-                  <FontAwesome6 name="house-chimney" size={24} color="black" />
-                </View>
-                <View style={css.feriadoBorda}>
-                  <Text style={css.feriado}>Dia das Mães</Text>
-                  <Text style={css.feriadoData}>12/05/2024</Text>
-                </View>
-              </View>
-
-              <View style={css.feriadoCard}>
-                <View style={css.casinha}>
-                  <FontAwesome6 name="house-chimney" size={24} color="black" />
-                </View>
-                <View style={css.feriadoBorda}>
-                  <Text style={css.feriado}>Corpus Christi</Text>
-                  <Text style={css.feriadoData}>30/05/2024</Text>
-                </View>
-              </View>
+              )}
             </View>
           </ScrollView>
-          
         </View>
       </View>
 
-      <View style={css.informacoes}>
+      <View style={styles.informacoes}>
         {selectedDate ? (
           <View>
-            <Text style={css.textoFulano}>Cronograma</Text>
-            <Text style={css.textoData}>{selectedDate}</Text>
-            <ScrollView nestedScrollEnabled={true} style={css.scrollContainer}>
-                <View style={css.divLado}>
-                  <View>
-                    <Text style={css.textoAula}>Python</Text>
-                    <Text style={css.textoProfessor}>Prof° Bruno</Text>
-                  </View>
-                  <View>
-                    <Text style={css.textoHorario}>15:00</Text>
-                    <Text style={css.textoSala}>Sala 2</Text>
-                  </View>
+            <Text style={styles.textoFulano}>Cronograma</Text>
+            <Text style={styles.textoData}>{formataData(selectedDate)}</Text>
+            <ScrollView nestedScrollEnabled={true} style={styles.scrollContainer}>
+              <View style={styles.divLado}>
+                <View>
+                  <Text style={styles.textoAula}>Python</Text>
+                  <Text style={styles.textoProfessor}>Prof° Bruno</Text>
                 </View>
+                <View>
+                  <Text style={styles.textoHorario}>15:00</Text>
+                  <Text style={styles.textoSala}>Sala 2</Text>
+                </View>
+              </View>
+              
+              <View style={styles.divLado}>
+                <View>
+                  <Text style={styles.textoAula}>Python</Text>
+                  <Text style={styles.textoProfessor}>Prof° Bruno</Text>
+                </View>
+                <View>
+                  <Text style={styles.textoHorario}>15:00</Text>
+                  <Text style={styles.textoSala}>Sala 2</Text>
+                </View>
+              </View>
 
-                <View style={css.divLado}>
-                  <View>
-                    <Text style={css.textoAula}>Python</Text>
-                    <Text style={css.textoProfessor}>Prof° Bruno</Text>
-                  </View>
-                  <View>
-                    <Text style={css.textoHorario}>15:00</Text>
-                    <Text style={css.textoSala}>Sala 2</Text>
-                  </View>
+              <View style={styles.divLado}>
+                <View>
+                  <Text style={styles.textoAula}>Python</Text>
+                  <Text style={styles.textoProfessor}>Prof° Bruno</Text>
                 </View>
+                <View>
+                  <Text style={styles.textoHorario}>15:00</Text>
+                  <Text style={styles.textoSala}>Sala 2</Text>
+                </View>
+              </View>
 
-                <View style={css.divLado}>
-                  <View>
-                    <Text style={css.textoAula}>Python</Text>
-                    <Text style={css.textoProfessor}>Prof° Bruno</Text>
-                  </View>
-                  <View>
-                    <Text style={css.textoHorario}>15:00</Text>
-                    <Text style={css.textoSala}>Sala 2</Text>
-                  </View>
+              <View style={styles.divLado}>
+                <View>
+                  <Text style={styles.textoAula}>Python</Text>
+                  <Text style={styles.textoProfessor}>Prof° Bruno</Text>
                 </View>
+                <View>
+                  <Text style={styles.textoHorario}>15:00</Text>
+                  <Text style={styles.textoSala}>Sala 2</Text>
+                </View>
+              </View>
 
-                <View style={css.divLado}>
-                  <View>
-                    <Text style={css.textoAula}>Python</Text>
-                    <Text style={css.textoProfessor}>Prof° Bruno</Text>
-                  </View>
-                  <View>
-                    <Text style={css.textoHorario}>15:00</Text>
-                    <Text style={css.textoSala}>Sala 2</Text>
-                  </View>
+              <View style={styles.divLado}>
+                <View>
+                  <Text style={styles.textoAula}>Python</Text>
+                  <Text style={styles.textoProfessor}>Prof° Bruno</Text>
                 </View>
+                <View>
+                  <Text style={styles.textoHorario}>15:00</Text>
+                  <Text style={styles.textoSala}>Sala 2</Text>
+                </View>
+              </View>
 
-                <View style={css.divLado}>
-                  <View>
-                    <Text style={css.textoAula}>Python</Text>
-                    <Text style={css.textoProfessor}>Prof° Bruno</Text>
-                  </View>
-                  <View>
-                    <Text style={css.textoHorario}>15:00</Text>
-                    <Text style={css.textoSala}>Sala 2</Text>
-                  </View>
+              <View style={styles.divLado}>
+                <View>
+                  <Text style={styles.textoAula}>Python</Text>
+                  <Text style={styles.textoProfessor}>Prof° Bruno</Text>
                 </View>
+                <View>
+                  <Text style={styles.textoHorario}>15:00</Text>
+                  <Text style={styles.textoSala}>Sala 2</Text>
+                </View>
+              </View>
             </ScrollView>
           </View>
         ) : (
           <View>
-            <Text style={css.textoFulano}>Olá, Cauê Barbosa!</Text>
-            <Text style={css.textoFulano2}>Confira seu cronograma selecionando o dia no calendário!</Text>
+            <Text style={styles.textoFulano}>Olá, Cauê Barbosa!</Text>
+            <Text style={styles.textoFulano2}>Confira seu cronograma selecionando o dia no calendário!</Text>
           </View>
         )}
-        <Image style={css.logoBranca} source={require('../assets/logoCompBranca.png')} />
+        <Image style={styles.logoBranca} source={require('../assets/logoCompBranca.png')} />
       </View>
     </ScrollView>
   );
 }
 
-const css = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -204,7 +245,7 @@ const css = StyleSheet.create({
   },
   feriadoScrollContainer: {
     height: 160,
-    width: 395, 
+    width: 395,
     marginLeft: 1,
     marginRight: 30,
   },
@@ -217,15 +258,14 @@ const css = StyleSheet.create({
     width: '100%',
   },
   casinha: {
-    borderWidth: 1,
     padding: 15,
     borderRadius: 15,
-    marginRight: 10, 
+    marginRight: 10,
   },
   feriadoBorda: {
     flex: 1,
     borderWidth: 1,
-    borderColor: "#000",
+    borderColor: "#fff",
     padding: 10,
     borderRadius: 15,
     shadowColor: "#000",
@@ -235,7 +275,7 @@ const css = StyleSheet.create({
     elevation: 5,
     backgroundColor: "#fff",
   },
-  feriadoContainer:{
+  feriadoContainer: {
     marginLeft: 30,
     marginRight: 30,
   },
@@ -277,7 +317,7 @@ const css = StyleSheet.create({
     marginRight: 30,
   },
   scrollContainer: {
-    height: 300, 
+    height: 300,
     marginLeft: '8%',
     marginRight: '8%',
     marginTop: 10,
@@ -290,7 +330,7 @@ const css = StyleSheet.create({
     width: '100%',
     borderRadius: 20,
     justifyContent: 'space-between',
-    marginBottom: 10, 
+    marginBottom: 10,
   },
   textoAula: {
     fontSize: 40,

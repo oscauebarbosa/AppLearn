@@ -1,19 +1,22 @@
-import React from 'react';
-import { View, Image, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-export default function App() {
+export default function SplashScreen() {
   const navigation = useNavigation();
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigation.navigate('TelaEntrar');
+    }, 2000); // 2 segundos de exibição
+
+    return () => clearTimeout(timer);
+  }, [navigation]);
+
   return (
-    <TouchableOpacity 
-      style={styles.container} 
-      onPress={() => navigation.navigate("TelaEntrar")}
-    >
-      <View style={styles.container}>
-        <Image source={require('../assets/logoCompBranca.png')} style={styles.logo} />
-      </View>
-    </TouchableOpacity>
+    <View style={styles.container}>
+      <Image source={require('../assets/logoCompBranca.png')} style={styles.logo} />
+    </View>
   );
 }
 
@@ -26,6 +29,6 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: 250,
-    height: 100
-  }
+    height: 100,
+  },
 });

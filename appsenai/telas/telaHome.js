@@ -50,6 +50,7 @@ export default function MyComponent({ navigation }) {
 
   const formataData = (data) => {
     const date = new Date(data);
+    date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
     return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   }
 
@@ -57,6 +58,8 @@ export default function MyComponent({ navigation }) {
     const [year, month] = holiday.date.split('-');
     return parseInt(month, 10) === selectedMonth && parseInt(year, 10) === selectedYear;
   });
+
+  const isHoliday = selectedDate && holidays.some(holiday => holiday.date === selectedDate);
 
   return (
     <ScrollView nestedScrollEnabled={true} style={styles.container}>
@@ -136,77 +139,84 @@ export default function MyComponent({ navigation }) {
 
       <View style={styles.informacoes}>
         {selectedDate ? (
-          <View>
-            <Text style={styles.textoFulano}>Cronograma</Text>
-            <Text style={styles.textoData}>{formataData(selectedDate)}</Text>
-            <ScrollView nestedScrollEnabled={true} style={styles.scrollContainer}>
-              <View style={styles.divLado}>
-                <View>
-                  <Text style={styles.textoAula}>Python</Text>
-                  <Text style={styles.textoProfessor}>Prof° Bruno</Text>
+          isHoliday ? (
+            <View style={styles.divLado}>
+              <Text style={styles.textoAula}>Não haverá aula!</Text>
+            </View>
+          ) : (
+            <View>
+              <Text style={styles.textoFulano}>Cronograma</Text>
+              <Text style={styles.textoData}>{formataData(selectedDate)}</Text>
+              <ScrollView nestedScrollEnabled={true} style={styles.scrollContainer}>
+                <View style={styles.divLado}>
+                  <View>
+                    <Text style={styles.textoAula}>Python</Text>
+                    <Text style={styles.textoProfessor}>Prof° Bruno</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.textoHorario}>15:00</Text>
+                    <Text style={styles.textoSala}>Sala 2</Text>
+                  </View>
                 </View>
-                <View>
-                  <Text style={styles.textoHorario}>15:00</Text>
-                  <Text style={styles.textoSala}>Sala 2</Text>
+                
+                <View style={styles.divLado}>
+                  <View>
+                    <Text style={styles.textoAula}>Python</Text>
+                    <Text style={styles.textoProfessor}>Prof° Bruno</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.textoHorario}>15:00</Text>
+                    <Text style={styles.textoSala}>Sala 2</Text>
+                  </View>
                 </View>
-              </View>
-              
-              <View style={styles.divLado}>
-                <View>
-                  <Text style={styles.textoAula}>Python</Text>
-                  <Text style={styles.textoProfessor}>Prof° Bruno</Text>
-                </View>
-                <View>
-                  <Text style={styles.textoHorario}>15:00</Text>
-                  <Text style={styles.textoSala}>Sala 2</Text>
-                </View>
-              </View>
 
-              <View style={styles.divLado}>
-                <View>
-                  <Text style={styles.textoAula}>Python</Text>
-                  <Text style={styles.textoProfessor}>Prof° Bruno</Text>
+                <View style={styles.divLado}>
+                  <View>
+                    <Text style={styles.textoAula}>Python</Text>
+                    <Text style={styles.textoProfessor}>Prof° Bruno</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.textoHorario}>15:00</Text>
+                    <Text style={styles.textoSala}>Sala 2</Text>
+                  </View>
                 </View>
-                <View>
-                  <Text style={styles.textoHorario}>15:00</Text>
-                  <Text style={styles.textoSala}>Sala 2</Text>
-                </View>
-              </View>
 
-              <View style={styles.divLado}>
-                <View>
-                  <Text style={styles.textoAula}>Python</Text>
-                  <Text style={styles.textoProfessor}>Prof° Bruno</Text>
+                <View style={styles.divLado}>
+                  <View>
+                    <Text style={styles.textoAula}>Python</Text>
+                    <Text style={styles.textoProfessor}>Prof° Bruno</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.textoHorario}>15:00</Text>
+                    <Text style={styles.textoSala}>Sala 2</Text>
+                  </View>
                 </View>
-                <View>
-                  <Text style={styles.textoHorario}>15:00</Text>
-                  <Text style={styles.textoSala}>Sala 2</Text>
-                </View>
-              </View>
 
-              <View style={styles.divLado}>
-                <View>
-                  <Text style={styles.textoAula}>Python</Text>
-                  <Text style={styles.textoProfessor}>Prof° Bruno</Text>
+                <View style={styles.divLado}>
+                  <View>
+                    <Text style={styles.textoAula}>Python</Text>
+                    <Text style={styles.textoProfessor}>Prof° Bruno</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.textoHorario}>15:00</Text>
+                    <Text style={styles.textoSala}>Sala 2</Text>
+                  </View>
                 </View>
-                <View>
-                  <Text style={styles.textoHorario}>15:00</Text>
-                  <Text style={styles.textoSala}>Sala 2</Text>
-                </View>
-              </View>
 
-              <View style={styles.divLado}>
-                <View>
-                  <Text style={styles.textoAula}>Python</Text>
-                  <Text style={styles.textoProfessor}>Prof° Bruno</Text>
+                <View style={styles.divLado}>
+                  <View>
+                    <Text style={styles.textoAula}>Python</Text>
+                    <Text style={styles.textoProfessor}>Prof° Bruno</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.textoHorario}>15:00</Text>
+                    <Text style={styles.textoSala}>Sala 2</Text>
+                  </View>
                 </View>
-                <View>
-                  <Text style={styles.textoHorario}>15:00</Text>
-                  <Text style={styles.textoSala}>Sala 2</Text>
-                </View>
-              </View>
-            </ScrollView>
-          </View>
+                
+              </ScrollView>
+            </View>
+          )
         ) : (
           <View>
             <Text style={styles.textoFulano}>Olá, Cauê Barbosa!</Text>
